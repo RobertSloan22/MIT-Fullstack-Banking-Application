@@ -1,0 +1,19 @@
+{
+  "name": "littledb",
+  "version": "1.0.0",
+  "description": "lowdb sample for 1.125",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "abel@mit.edu",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^5.3.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "lowdb": "^1.0.0",
+    "mongodb": "^3.7.4",
+    "mongodb-client": "^0.0.1"
+  }
+}

@@ -1,27 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>BadBank React</title>
+    <meta charset="UTF-8" />
+    <title>Robert Sloan Full Stack Banking App </title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
-    <!-- bootstrap css -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">    <!-- don't use this in production: -->
+    <!-- bootstrap & bootstrap table css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap-table/4.3.1/react-bootstrap-table-all.min.css" integrity="sha512-g4W7wJRxZaaFx0lUNfcsYO4d/VQQLn506GW5SNV+SZqLaCIObIpXbiqyiA2ZDyKreZMbMsdCaQeJuil8dS55Wg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- app css -->
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+    <!-- don't use this in production: -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
   <body>
-    <!-- we will put our teact component inside this div -->
+    <!-- we will put our react component inside this div -->
     <div id="root"></div>
-
-    <!-- load jquery & bootstrap for responsive navbar -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>    
 
     <!-- load react -->
     <script src="https://unpkg.com/react/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-router@5.2.1/umd/react-router.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-router-dom@5.2.1/umd/react-router-dom.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-router@5/umd/react-router.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-router-dom@5/umd/react-router-dom.min.js" crossorigin></script>
 
-    <!-- load our react component. -->
+    <!-- load react bootstrap table-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap-table/4.3.1/react-bootstrap-table.min.js" integrity="sha512-uftWh0O2mYBv72SDcCmdkUmeHf9QMebt4JUfYPm9JCkdCDNwLQRpX6KUTHlfxgdJoiKiTd1YkwGIBFpGR8DHEw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- load firebase authentication -->
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+
+    <!-- load our react components -->
     <script src="context.js" defer type="text/babel"></script>
     <script src="navbar.js" defer type="text/babel"></script>
     <script src="createaccount.js" defer type="text/babel"></script>
@@ -33,8 +44,53 @@
     <script src="home.js" defer type="text/babel"></script>
     <script src="index.js" defer type="text/babel"></script>
 
+    <script type="module">
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCq6URfbIdU3LlwdHk8_r8pzgcBAKzYWrI",
+        authDomain: "banking-app-1eecf.firebaseapp.com",
+        projectId: "banking-app-1eecf",
+        storageBucket: "banking-app-1eecf.appspot.com",
+        messagingSenderId: "800890139400",
+        appId: "1:800890139400:web:d85029b22df0fa94a772bd"
+      };
 
+      // Initialize Firebase
+      const app = firebase.initializeApp(firebaseConfig);
+      
+      // clear any existing log-in sessions
+      firebase.auth().signOut()
+
+      // firebase login state
+      firebase.auth().onAuthStateChanged((firebaseUser) => {
+        const loggedInStatus = document.getElementById('loggedInStatus');	
+        const depositLink    = document.getElementById('depositLink');	
+        const withdrawLink   = document.getElementById('withdrawLink');	
+        const balanceLink    = document.getElementById('balanceLink');	
+        const createLink     = document.getElementById('createLink');	
+        const loginLink      = document.getElementById('loginLink');	
+        const logoutLink     = document.getElementById('logoutLink');	
+        if (firebaseUser) {
+          console.log('Firebase Auth Logged-In: ' + firebaseUser.email);
+          loggedInStatus.innerText = firebaseUser.email;
+          createLink.style.display = "none";
+          loginLink.style.display = "none";
+          logoutLink.style.display = "inline-block";
+          depositLink.style.display = "inline-block";
+          withdrawLink.style.display = "inline-block";
+          balanceLink.style.display = "inline-block";
+        } else {
+          console.log('Firebase Auth Logged-Out');
+          loggedInStatus.innerText = "Logged-Out";
+          createLink.style.display = "inline-block";
+          loginLink.style.display = "inline-block";
+          logoutLink.style.display = "none";
+          depositLink.style.display = "none";
+          withdrawLink.style.display = "none";
+          balanceLink.style.display = "none";
+        }
+      });
+    </script>
+    
   </body>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-  </html>
+</html>

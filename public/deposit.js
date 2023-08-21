@@ -30,18 +30,23 @@ function DepositForm(props){
   const [amount, setAmount] = React.useState('');
   const ctx = React.useContext(UserContext);  
 
-  function handle(){
-    console.log(email,amount);
-    const user = ctx.users.find((user) => user.email == email);
-    if (!user) {
-      props.setStatus('fail!');
-      return;      
-    }
-
-    user.balance = user.balance + Number(amount);
-    console.log(user);
-    props.setStatus('');      
-    props.setShow(false);
+  function handle() {
+    console.log(email, amount);
+    fetch('/account/update/' + email + '/' + amount)
+      .then((response) => response.json())
+      .then((user) => {
+        if (!user) {
+          props.setStatus('fail!');
+          return;
+        }
+        console.log(user);
+        props.setStatus('');
+        props.setShow(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        props.setStatus('fail!');
+      });
   }
 
   return(<>
